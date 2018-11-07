@@ -42,7 +42,8 @@ export default class CardsList extends Component{
      renderItem = ({ item }) => (
        
          <View style={styles.containerBoards}>
-         <TouchableOpacity onPress={this.toggleExpanded}>
+         <TouchableOpacity onPress={()=> this.props.navigation.navigate( 'Lista' , {  itemId: item
+               })}>
                <Text style={styles.textBoard}>{item.name} 
               </Text>
             
@@ -81,13 +82,7 @@ export default class CardsList extends Component{
          <View>
          </View>
          <View>
-        <Collapsible collapsed={this.state.collapsed}>
-            <View>
-                <Text>
-                {item.name}
-                </Text>
-            </View>
-        </Collapsible>   
+       
         </View>
          
         </View>
