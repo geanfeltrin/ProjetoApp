@@ -2,6 +2,7 @@ import React,{Component} from 'react'
 import {Text, View, FlatList, StyleSheet} from 'react-native'
 import Boards from '../components/Boards'
 import api from '../services/api'
+import {Filho} from '../components/Cards/lists'
 // import Cards from '../components/Cards/cards'
 
 
@@ -9,10 +10,8 @@ import api from '../services/api'
 export default class Lista extends Component{
    state={
         cards:{},
-        lista:{ id: 'nome', nome:{ endereço: 'a',
-    }}
         
-       
+  
    }
    
 static navigationOptions = ({ navigation }) => {
@@ -30,35 +29,25 @@ componentDidMount = () => {
 
 loadCards = async (props) =>{
     console.log(props)
-    const response = await api.get(`boards/${props}?cards=all`)
+    const response = await api.get(`boards/${props}?cards=all&lists=all&list_field=id,name`)
     this.setState({ cards: response.data })
     console.log(response.data)
 
 }
-
- renderItem = ({item})=> (
-     <View>
-         <Text>{item.name}</Text>
-     </View>
- )
-
+ 
 
    
     render(){
-       const cards = this.state.cards.cards
-       console.log(cards)
-    return(
-        <View>
-            <FlatList 
-            data={cards}
-            keyExtractor={item=>item.id}          
-            renderItem={this.renderItem}
-             />
-        </View>
-       )
-        
-   }
+    const {cards , lists} = this.state.cards
+    
+    console.log(cards)
 
+       return(
+            <View><Text>Tes</Text>
+                
+                </View>
+      )
+}
 }
 
 
