@@ -4,8 +4,8 @@ import Lista from './views/lista'
 import Card from './views/boards'
 
 export default createStackNavigator ({
-    Card,
     Main,
+    Card,
     Lista
 },{
     navigationOptions:{

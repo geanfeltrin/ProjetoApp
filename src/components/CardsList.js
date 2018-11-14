@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native'
+import {View, Text, FlatList, StyleSheet, TouchableOpacity, SectionList} from 'react-native'
 import api from '../services/api'
 import ProgressBar from 'react-native-progress/Bar'
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -10,12 +10,11 @@ export default class CardsList extends Component{
 
     state = {
         boards: [],
-        cards:[],
-        collapsed: true,   
+          
     }
     static navigationOptions = {
         title: "Lista de Projetos"
-    }   
+    } 
     componentDidMount = () => {
         this.loadBoards()              
         
@@ -23,86 +22,57 @@ export default class CardsList extends Component{
 
     loadBoards = async ()  =>{
         const response = await api.get('members/me/boards')
-        this.setState({ boards: response.data })
+        const boards = response.data.map(boards => ({
+            title: boards.name,
+            backgroundColor: boards.prefs.backgroundColor
+        }))
+
+        this.setState({ boards })
+        console.log(this.state.boards)
     }
-
-    loadCards = async (props) =>{
-        const response = await api.get(`boards/${props}?cards=visible&card_member_fields=all`)
-        this.setState({ cards: response.data })
-        console.log('test')
-    }
-
-    toggleExpanded = () => {
-    this.setState({ collapsed: !this.state.collapsed });
-        console.log(this.state.collapsed)
-      };
-
+  
+   
     renderItem = ({ item }) => (
        
         <View style={styles.containerBoards}>
-              <Text style={styles.textBoard}>{item.name} 
-             </Text>
-            
-          <View style={{flex: 1, flexDirection: 'row'}}>
-             <View style={styles.GridViewContainer}>
-                 <Text style={styles.textValor}>10</Text>
-                 <Text style={styles.textTask}>
-                     Atividades
-                 </Text>        
-             </View>
-             <View style={styles.GridViewContainer}>
-                 <Text style={styles.textValor}>5</Text>
-                
-                 <Text style={styles.textTask}>
-                 <Icon name="check" color="green"/>Completos
-                 </Text>
-                
-                 </View>
-             <View style={styles.GridViewContainer}>
-                 <Text style={styles.textValorDays}>3</Text>
-                 <Text style={styles.textTask}>
-                     Days left
-                 </Text>    
-             </View>
-         </View>
+        <TouchableOpacity onPress={()=> this.props.navigation.navigate( 'Lista' , {  itemId: item
+              })}>
+              <Text style={styles.textTitle}>{item.title} </Text>
+              <View style={{width: '100%', height: 5, backgroundColor:item.backgroundColor}}/>     
+        </TouchableOpacity>  
+       </View>
+       
         
-         <ProgressBar progress={0.3} width={null} height={15} borderRadius={5} borderWidth={1} animated={true} />
-       
-         <View>
-       
-        <TouchableOpacity onPress={() => this.props.navigation.navigate("Lista", { lista: item })}>
-          <View>
-            <Text >Single Collapsible</Text>
-          </View>
-        </TouchableOpacity>
-        <View>
-        </View>
-          
-     </View>
-        </View>
+      
+   
+        
     )
 
-   
-   
+    renderSeparator = () =>(
+        <View 
+        sytle={{ height:10, width: '100%' , backgroundColor:'black'
+
+        }}></View>
+    )
+  
 
     render(){
-        
         return(
-            <View style={styles.container}>            
+            <View style={styles.container}>
+                <Text style={styles.textTitleP}>Marketing</Text>
+                <Text style={styles.textTitleSub}>Projetos</Text>          
                  <FlatList
-                    contentContainerStyle={styles.list}
+                     contentContainerStyle={styles.list}
                     data={this.state.boards}
                     extraData={this.state.collapsed}
                     keyExtractor={item=>item.id}
                     renderItem={this.renderItem}
+                    ItemSeparatorComponent={this.renderSeparator}
                     />
        
             </View>
-          
- 
-            )  
-     
-        
+        )   
+
     }
 }
 
@@ -113,74 +83,48 @@ export default class CardsList extends Component{
       alignItems: 'center',
       backgroundColor: '#F5FCFF',
     },
-    textBoard: {
+  
+    textTitle: {
         fontSize: 20,
         fontWeight: "bold",
         color: "#333333",
         justifyContent: "center",
-        alignItems: "center",
-        paddingBottom: 10,
+        textAlign: "center",
+        paddingBottom: 20,
         marginBottom: 5,
+    },
+    textTitleP: {
+        fontSize: 30,
+        fontWeight: "bold",
+        color: "#000F3D",
+        justifyContent: "center",
+        alignItems: "center",
+      
     },
     
     list:{
         padding:20,
     },
-    buttonVisible:{
-        height:42,
-        borderRadius:5,
-        borderWidth:2,
-        borderColor: "#DA552F",
-        backgroundColor: "transparent",
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: 10 
-    },
+
     containerBoards:{
+        paddingTop:20,        
         backgroundColor: "#ffffff",
         borderWidth: 1,
         borderColor: "#dddddd",
-        borderRadius: 5,
-        padding: 20,
         marginBottom: 20
 
     },
-    GridViewContainer:{
-        flex:0.3,
-        width: 10,
-        backgroundColor: 'transparent',
-        padding:0
-    },
-    textTask:{
-        fontSize: 15,
-        fontWeight: "bold",
-        color: "#333333",
-        paddingBottom: 10,
-        textAlign: "center"
-    },
-    textValor:{
-        fontSize: 18,
-        fontWeight: "bold",
-        color: "gray",
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 5,
-        paddingLeft:10,
-        textAlign: "center"
-     },
-     textValorDays:{
-        fontSize: 18,
-        fontWeight: "bold",
-        color: "green",
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 5,
-        textAlign: "center"
-     },
-     content: {
+  
+ content: {
         flex:1,
         padding: 20,
         
       },
+      textTitleSub:{
+          textAlign: 'center',
+          color: '#009A5D',
+          fontSize:20
+        
+      }
   });
   

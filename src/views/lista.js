@@ -71,7 +71,7 @@ return(
             <Text style={{fontWeight: 'bold'}}>{title}</Text>
         )}
         sections={this.state.cards}
-  keyExtractor={(item, index) => item + index}
+        keyExtractor={(item, index) => item + index}
 />
        
           
