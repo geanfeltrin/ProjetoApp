@@ -1,10 +1,24 @@
 import React, { Component } from 'react'
-import {View, Text, FlatList, StyleSheet, TouchableOpacity, SectionList} from 'react-native'
+import {View, Text, FlatList, StyleSheet, TouchableOpacity, Image} from 'react-native'
 import api from '../services/api'
 import ProgressBar from 'react-native-progress/Bar'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Collapsible from 'react-native-collapsible'
+import app from '../../assets/img/app.png'
+import lan from '../../assets/img/lan.png'
+import site from '../../assets/img/site.png'
+import Cards from './Cards/cards'
 
+
+// class Test extends Component{
+//     render(){
+//       const check = 
+//         if(this.props.backgroundColor==='#0079BF')
+//         return site
+//         else(this.props.backgroundColor==='#89609E')
+//         return app
+//     }
+// }
 
 export default class CardsList extends Component{
 
@@ -24,6 +38,7 @@ export default class CardsList extends Component{
         const response = await api.get('members/me/boards')
         const boards = response.data.map(boards => ({
             title: boards.name,
+            id: boards.id,
             backgroundColor: boards.prefs.backgroundColor
         }))
 
@@ -33,19 +48,16 @@ export default class CardsList extends Component{
   
    
     renderItem = ({ item }) => (
-       
         <View style={styles.containerBoards}>
         <TouchableOpacity onPress={()=> this.props.navigation.navigate( 'Lista' , {  itemId: item
               })}>
+              <View style={{flexDirection:'row',margin:15}}>
+              <Cards backgroundColor={item.backgroundColor}/>
               <Text style={styles.textTitle}>{item.title} </Text>
+              </View>
               <View style={{width: '100%', height: 5, backgroundColor:item.backgroundColor}}/>     
         </TouchableOpacity>  
-       </View>
-       
-        
-      
-   
-        
+       </View>        
     )
 
     renderSeparator = () =>(
@@ -89,7 +101,7 @@ export default class CardsList extends Component{
         fontWeight: "bold",
         color: "#333333",
         justifyContent: "center",
-        textAlign: "center",
+        textAlign: 'left',
         paddingBottom: 20,
         marginBottom: 5,
     },

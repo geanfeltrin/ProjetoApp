@@ -1,7 +1,5 @@
 import React, {Component} from 'react'
 import {View, Text, ImageBackground, Image} from 'react-native'
-
-import img from '../../assets/imagens/img.png'
 import CardsList from '../components/CardsList';
 
 
