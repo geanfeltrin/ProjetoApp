@@ -10,7 +10,7 @@ export default createStackNavigator ({
 },{
     navigationOptions:{
         headerStyle:{
-            backgroundColor: '#add8e6',
+            backgroundColor: '#000f3d',
         },
         headerTintColor: '#fff',
         

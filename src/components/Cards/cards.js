@@ -13,12 +13,14 @@ export default props =>{
                 <Image source={site} style={styles.iconStyle} resizeMode = 'contain'/>
             </View>
         )
+      
     }else if(props.backgroundColor === '#89609E'){
         check = (
             <View>
             <Image source={lan} style={styles.iconStyle} resizeMode = 'contain'/>
         </View>
         )
+        
 
     }else if(props.backgroundColor === '#519839'){
         check = (
@@ -26,9 +28,11 @@ export default props =>{
             <Image source={app} style={styles.iconStyle} resizeMode = 'contain'/>
         </View>
         )
+       
     }
     
 return (
+ 
     <View style={styles.containerBoards}>
         <View style={{ flexDirection: 'row'}}>
             <View style={{backgroundColor: props.backgroundColor, width: 70,
@@ -39,8 +43,9 @@ return (
                         marginLeft:10,}} >
                 {check}
             </View>
-            <View style={styles.textTitle} >
-                <Text>{props.title}</Text>
+            <View style={styles.contenTitle} >
+                <Text style={styles.textTitle}>{props.title}</Text>
+                
             </View>   
         </View> 
  
@@ -64,15 +69,20 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     textTitle: {
-        fontSize: 20,
-        fontWeight: "bold",
-        width: 230, 
-        height: 50,
-        marginLeft:10, 
-        marginTop: 10
-       
-      
+        fontSize: 15,
+        fontWeight:'bold',
+        marginLeft:15, 
+        marginTop: 20,
+        fontFamily: 'Lato-Thin'
     },
+    contenTitle:{
+    width: 230, 
+    height: 50,
+    },
+    textDesc:{
+        fontSize:10
+    },   
+
     containerBoards:{
         paddingTop:10,        
         backgroundColor: "#ffffff",
