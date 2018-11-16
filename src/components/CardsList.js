@@ -8,7 +8,7 @@ import app from '../../assets/img/app.png'
 import lan from '../../assets/img/lan.png'
 import site from '../../assets/img/site.png'
 import Cards from './Cards/cards'
-
+import logo from '../../assets/img/logo.png'
 
 // class Test extends Component{
 //     render(){
@@ -48,39 +48,42 @@ export default class CardsList extends Component{
   
    
     renderItem = ({ item }) => (
-        <View style={styles.containerBoards}>
+        <View>
         <TouchableOpacity onPress={()=> this.props.navigation.navigate( 'Lista' , {  itemId: item
               })}>
-              <View style={{flexDirection:'row',margin:15}}>
-              <Cards backgroundColor={item.backgroundColor}/>
-              <Text style={styles.textTitle}>{item.title} </Text>
-              </View>
-              <View style={{width: '100%', height: 5, backgroundColor:item.backgroundColor}}/>     
+
+        <Cards backgroundColor={item.backgroundColor} title={item.title}/>
+                
         </TouchableOpacity>  
        </View>        
     )
 
-    renderSeparator = () =>(
-        <View 
-        sytle={{ height:10, width: '100%' , backgroundColor:'black'
+    // renderSeparator = () =>(
+    //     <View 
+    //     sytle={{ height:10, width: '100%' , backgroundColor:'black'
 
-        }}></View>
-    )
+    //     }}></View>
+    // )
   
 
     render(){
         return(
             <View style={styles.container}>
+            <View style={{width:'100%' ,height: 100, backgroundColor: "#000f3d", justifyContent:'center'}}>
+                <Image source={logo} style={{width:200 ,height: 100}}/>
+            </View>
                 <Text style={styles.textTitleP}>Marketing</Text>
-                <Text style={styles.textTitleSub}>Projetos</Text>          
-                 <FlatList
-                     contentContainerStyle={styles.list}
+                <Text style={styles.textTitleSub}>Projetos</Text> 
+                
+                  
+             
+                  <FlatList
+                    contentContainerStyle={styles.list}
                     data={this.state.boards}
-                    extraData={this.state.collapsed}
                     keyExtractor={item=>item.id}
                     renderItem={this.renderItem}
-                    ItemSeparatorComponent={this.renderSeparator}
-                    />
+                    // ItemSeparatorComponent={this.renderSeparator}
+                    /> 
        
             </View>
         )   
@@ -93,7 +96,7 @@ export default class CardsList extends Component{
       flexGrow: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#F5FCFF',
+      backgroundColor: '#F1EEFC',
     },
   
     textTitle: {
@@ -105,10 +108,19 @@ export default class CardsList extends Component{
         paddingBottom: 20,
         marginBottom: 5,
     },
+
     textTitleP: {
         fontSize: 30,
         fontWeight: "bold",
         color: "#000F3D",
+        justifyContent: "center",
+        alignItems: "center",
+      
+    },
+    textTitleSub: {
+        fontSize: 20,
+        fontWeight: "bold",
+        color: "#3AA96C",
         justifyContent: "center",
         alignItems: "center",
       
@@ -118,25 +130,11 @@ export default class CardsList extends Component{
         padding:20,
     },
 
-    containerBoards:{
-        paddingTop:20,        
-        backgroundColor: "#ffffff",
-        borderWidth: 1,
-        borderColor: "#dddddd",
-        marginBottom: 20
-
-    },
-  
- content: {
+content: {
         flex:1,
-        padding: 20,
-        
-      },
-      textTitleSub:{
-          textAlign: 'center',
-          color: '#009A5D',
-          fontSize:20
-        
-      }
+        padding: 10,
+ },
+
+
   });
   
