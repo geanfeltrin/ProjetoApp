@@ -44,8 +44,7 @@ return (
                 {check}
             </View>
             <View style={styles.contenTitle} >
-                <Text style={styles.textTitle}>{props.title}</Text>
-                
+                <Text style={styles.textTitle}>{props.title}</Text>               
             </View>   
         </View> 
  
@@ -65,47 +64,47 @@ return (
 
 
 const styles = StyleSheet.create({
-    titulo:{
-        textAlign: 'center'
+titulo:{
+    textAlign: 'center'
     },
-    textTitle: {
-        fontSize: 15,
-        fontWeight:'bold',
-        marginLeft:15, 
-        marginTop: 20,
-        fontFamily: 'Lato-Thin'
+textTitle: {
+    fontSize: 15,
+    fontWeight:'bold',
+    marginLeft:15, 
+    marginTop: 20,
+    fontFamily: 'Lato-Thin'
     },
-    contenTitle:{
+contenTitle:{
     width: 230, 
     height: 50,
     },
-    textDesc:{
-        fontSize:10
-    },   
+textDesc:{
+    fontSize:10
+},   
 
-    containerBoards:{
-        paddingTop:10,        
-        backgroundColor: "#ffffff",
-        borderWidth: 1,
-        borderColor: "#dddddd",
-        width: 350,
-        height: 100,
-        marginBottom:20
-        
-    },
-    iconStyle: {
-        width: 100,
-        height: 100,
-        tintColor:'#fff'
-        
-    },
-    viewSocialStyle: {
-        width: 50,
-        height: 50,
-        borderRadius: 5,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginLeft:10,
-        
-    }
+containerBoards:{
+    paddingTop:10,        
+    backgroundColor: "#ffffff",
+    borderWidth: 1,
+    borderColor: "#dddddd",
+    width: 350,
+    height: 100,
+    marginBottom:20
+    
+},
+iconStyle: {
+    width: 100,
+    height: 100,
+    tintColor:'#fff'
+    
+},
+viewSocialStyle: {
+    width: 50,
+    height: 50,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft:10,
+    
+}
 })

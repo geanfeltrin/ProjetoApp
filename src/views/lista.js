@@ -1,31 +1,12 @@
 import React,{Component} from 'react'
-import {Text, View, SectionList, StyleSheet} from 'react-native'
+import {Text, View, SectionList, StyleSheet, ScrollView} from 'react-native'
 import api from '../services/api'
+import ListaContent from '../components/Lista/ListasContent';
+import ListaHeader from '../components/Lista/ListasHeader';
+import Info from '../components/Lista/info'
 
-class SectionListItem extends Component{
-    render(){
-        return(
-            <View>
-                <Text>{this.props.item.name} {this.props.item.id}</Text>
-                
-            </View>
-           
-           )
-
-    }
-}
-
-class SectionListTitle extends Component{
-    render(){
-        return(
-            <View>
-                <Text style={{fontWeight: 'bold'}}>{this.props.section.title}</Text>
-                
-            </View>
-           
-           )
-
-    }
+Array.prototype.flatMap = function(callback){
+    return Array.prototype.concat.apply([], this.map(callback))
 }
 
 export default class Lista extends Component{
@@ -35,16 +16,19 @@ export default class Lista extends Component{
    }
    
 static navigationOptions = ({ navigation }) => {
-    const title = navigation.getParam('itemId')
+    const props = navigation.getParam('itemId')
     return{
-        title: title.name
+        title: 'Voltar',
+        headerStyle: {
+            backgroundColor: props.backgroundColor,
+          }
     }
 }
 
 componentDidMount = () => {
     const id = this.props.navigation.getParam('itemId')
-    const test = id.id
-    this.loadCards(test)
+    const props = id.id
+    this.loadCards(props)
 }
 
 loadCards = async (props) =>{
@@ -59,22 +43,41 @@ loadCards = async (props) =>{
 }
 
    
-render(){
-    const test = this.state.cards
-    console.log(test)
-      
+render(){  
+   const Afazer = this.state.cards.filter(card =>{
+          return card.title === 'A Fazer'
+    })
+    const concluidos = this.state.cards.filter(card =>{
+        return card.title === 'Concluído' || 'Concluido'|| 'Concluídos'
+  })
+    const getName = data => data.name 
+    const getData = data => data.data.map(getName)
+
+  const TotalAfazer = Afazer.flatMap(getData)
+  const TotalConcluidos = concluidos.flatMap(getData)
+    
+    console.log(TotalConcluidos)
+    
+     
+const params = this.props.navigation.getParam('itemId')   
 return(
-    <View>            
-    <SectionList
-        renderItem={({item, index, section}) => <Text key={index}>{item.name}</Text>}
+    <View style={{flex: 1, marginBottom:20}}>
+        <View style={[styles.header, {backgroundColor: params.backgroundColor}]}>
+        <Info title={params.title} backgroundColor={params.backgroundColor} atividades={TotalAfazer.length} completos={TotalConcluidos.length}/>
+        </View>
+       
+             
+     <SectionList
+        renderItem={({item, index, section}) => (<ListaContent name={item.name} key={index} title={section.title}/>)}
         renderSectionHeader={({section: {title}}) => (
-            <Text style={{fontWeight: 'bold'}}>{title}</Text>
+            <ListaHeader title={title}/>
         )}
         sections={this.state.cards}
         keyExtractor={(item, index) => item + index}
-/>
+        removeClippedSubviews={true}
        
-          
+    /> 
+  
         
     </View>
       )
@@ -83,8 +86,11 @@ return(
 
 
 const styles = StyleSheet.create({
-    list:{
-        padding: 10
+   header:{
+       width: '100%',
+       height: 170,
+     
+
     }
    
 })
