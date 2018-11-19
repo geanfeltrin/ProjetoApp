@@ -1,7 +1,7 @@
 import React,{Component} from 'react'
 import {View, Text, StyleSheet} from 'react-native'
 import Icon from 'react-native-vector-icons/Entypo'
-import IconT from 'react-native-vector-icons/AntDesign'
+import IconT from 'react-native-vector-icons/MaterialIcons'
 
 export default class ListaContent extends Component {
 
@@ -19,12 +19,12 @@ export default class ListaContent extends Component {
     
         }else if(this.props.title === 'Pausado'){
             check = (
-                <IconT name={'pause'} size={30} color={'#e32636'} />
+                <IconT name={'pause'} size={30} />
             
             )           
         }else if(this.props.title === 'Concluído'){
             check = (
-                <Icon name={'check'} size={30} color={'green'}/>
+                <Icon name={'check'} size={30}/>
             
             )           
         }

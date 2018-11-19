@@ -4,6 +4,7 @@ import api from '../services/api'
 import ListaContent from '../components/Lista/ListasContent';
 import ListaHeader from '../components/Lista/ListasHeader';
 import Info from '../components/Lista/info'
+import { isAbsolute } from 'path';
 
 Array.prototype.flatMap = function(callback){
     return Array.prototype.concat.apply([], this.map(callback))
@@ -41,30 +42,36 @@ loadCards = async (props) =>{
 
     this.setState({ cards })
 }
-
+calculo = (a,b) =>{
+    const sum = (a/b)
+    return sum
+}
    
 render(){  
    const Afazer = this.state.cards.filter(card =>{
           return card.title === 'A Fazer'
     })
     const concluidos = this.state.cards.filter(card =>{
-        return card.title === 'Concluído' || 'Concluido'|| 'Concluídos'
+        return card.title === 'Concluído' 
   })
+  const execucao = this.state.cards.filter(card =>{
+    return card.title === 'Em Execução'
+})
     const getName = data => data.name 
     const getData = data => data.data.map(getName)
 
   const TotalAfazer = Afazer.flatMap(getData)
   const TotalConcluidos = concluidos.flatMap(getData)
-    
-    console.log(TotalConcluidos)
-    
+  const TotalEmExecucao = execucao.flatMap(getData)
+
+  
      
 const params = this.props.navigation.getParam('itemId')   
 return(
     <View style={{flex: 1, marginBottom:20}}>
         <View style={[styles.header, {backgroundColor: params.backgroundColor}]}>
-        <Info title={params.title} backgroundColor={params.backgroundColor} atividades={TotalAfazer.length} completos={TotalConcluidos.length}/>
-        </View>
+        <Info title={params.title} backgroundColor={params.backgroundColor} atividades={TotalAfazer.length} completos={TotalConcluidos.length} execucao={TotalEmExecucao.length}/>
+    </View>
        
              
      <SectionList
@@ -88,7 +95,7 @@ return(
 const styles = StyleSheet.create({
    header:{
        width: '100%',
-       height: 170,
+       height: 200,
      
 
     }

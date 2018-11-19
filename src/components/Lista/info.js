@@ -3,7 +3,9 @@ import { View, Image , StyleSheet, Text } from 'react-native'
 import app from '../../../assets/img/app.png'
 import lan from '../../../assets/img/lan.png'
 import site from '../../../assets/img/site.png'
+import rotina from '../../../assets/img/rotina.png'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import ProgressBar from 'react-native-progress/Bar'
 
 
 
@@ -15,14 +17,23 @@ export default props =>{
                 <Image source={site} style={styles.iconStyle} resizeMode = 'cover'/>
             </View>
         )
+        sub=(
+            <View>
+                <Text style={styles.textSubTitle}>Site</Text>
+            </View>
+        )
       
-    }else if(props.backgroundColor === '#89609E'){
+    }else if(props.backgroundColor === '#B04632'){
         check = (
             <View>
             <Image source={lan} style={styles.iconStyle} resizeMode = 'cover'/>
         </View>
         )
-        
+        sub=(
+            <View>
+                <Text style={styles.textSubTitle}>Lançamento</Text>
+            </View>
+        )
 
     }else if(props.backgroundColor === '#519839'){
         check = (
@@ -30,9 +41,26 @@ export default props =>{
             <Image source={app} style={styles.iconStyle} resizeMode = 'cover'/>
         </View>
         )
+        sub=(
+            <View>
+                <Text style={styles.textSubTitle}>Aplicativo</Text>
+            </View>
+        )
        
     }
-
+    else if(props.backgroundColor === '#89609E'){
+        check = (
+            <View>
+            <Image source={rotina} style={styles.iconStyle} resizeMode = 'cover'/>
+        </View>
+        )
+        sub=(
+            <View>
+                <Text style={styles.textSubTitle}>Rotina</Text>
+            </View>
+        )
+       
+    }
       
 return (
  <View style={{flexDirection:"column"}}>
@@ -41,6 +69,7 @@ return (
                 {check}          
             <View style={styles.contenTitle} >
                 <Text style={styles.textTitle}>Projeto: {props.title}</Text>
+                {sub}
             </View>
         </View>
         
@@ -52,24 +81,29 @@ return (
                     </Text>        
             </View>
             <View style={styles.GridViewContainer}>
+                  <Text style={styles.textValor}>{props.execucao}</Text>
+                  <Text style={styles.textTask}>
+                        Em execução
+                  </Text>    
+            </View>                    
+
+            <View style={styles.GridViewContainer}>
                 <Text style={styles.textValor}>{props.completos}</Text>
                  <View style={{flexDirection:'row'}}>
-                <Icon name="check" color="green" size={20}/>
+                <Icon name="check" color="#FFF" size={20}/>
                    <Text style={styles.textTask}>
                             Completos
                     </Text>
                     </View>
             </View>
-            <View style={styles.GridViewContainer}>
-                  <Text style={styles.textValorDays}>3</Text>
-                  <Text style={styles.textTask}>
-                      Days left
-                  </Text>    
-              </View>
-          
-
-
+     
         </View> 
+
+        <View style={{alignItems:"center", justifyContent: 'space-around',margin:10,marginTop:15,flexDirection:'row'}}>
+        <ProgressBar progress={0.3} width={350} height={10} borderRadius={5} borderWidth={1} animated={true} color={'#FFF'}/>
+        
+        <Text style={{color: "#FFF",fontFamily: 'Lato-Thin',fontWeight:'bold'}}>78%</Text>
+        </View>
 
   </View>     
    
@@ -91,18 +125,25 @@ textTitle: {
     marginTop: 35,
     fontFamily: 'Lato-Thin'
 },
+textSubTitle:{
+    fontSize: 15,  
+    color: '#F2F2F2',
+    fontFamily: 'Lato-Italic'
+    },
+
 contenTitle:{
     width: 250, 
-    height: 50,
+    
 },
 GridViewContainer:{
     flex:0.3,
     width: 30,
     height: 40,
     backgroundColor: 'transparent',
-    marginBottom: 20,
     alignItems:'center',
-    marginStart: 10,
+    margin: 10,
+    marginTop: 0
+
 },
 textTask:{
     fontSize: 15,
@@ -124,16 +165,5 @@ textValor:{
     fontFamily: 'Lato-Thin'
     
     },
-    textValorDays:{
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "green",
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 5,
-    textAlign: "center",
-    fontFamily: 'Lato-Thin'
-    }
-
-   
+    
 })

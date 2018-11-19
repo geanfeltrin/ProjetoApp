@@ -25,7 +25,8 @@ export default class Main extends Component{
         const boards = response.data.map(boards => ({
             title: boards.name,
             id: boards.id,
-            backgroundColor: boards.prefs.backgroundColor
+            backgroundColor: boards.prefs.backgroundColor,
+            closed: boards.closed
         }))
 
         this.setState({ boards })
@@ -37,7 +38,7 @@ export default class Main extends Component{
         <View>
         <TouchableOpacity onPress={()=> this.props.navigation.navigate( 'Lista' , {  itemId: item
               })}>
-        <Cards backgroundColor={item.backgroundColor} title={item.title}/>                
+        <Cards backgroundColor={item.backgroundColor} title={item.title} closed={item.closed}/>                
         </TouchableOpacity>  
        </View>        
     )
@@ -54,7 +55,7 @@ export default class Main extends Component{
                 <Image source={mktlogo} style={{width:300 ,height: 100}} resizeMode = 'cover'/>
             </View>
                 <View style={styles.contentText}>
-                <Text style={styles.textTitleSub}>Projetos</Text> 
+                <Text style={styles.textTitleSub}>PROJETOS</Text> 
                 </View>
         
              
@@ -85,12 +86,12 @@ export default class Main extends Component{
         alignItems:'center'
     },
     textTitleSub: {
-        fontSize: 30,
-        fontWeight: "bold",
+        fontSize: 20,
+        // fontWeight: "bold",
         color: "#000f3d",
         marginStart: 20,
-        marginTop: 10,
-        fontFamily: 'Lato-Thin',
+        marginTop: 20,
+        fontFamily: 'Lato-Regular',
         
         
      },
