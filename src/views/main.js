@@ -1,104 +1,140 @@
-import React, { Component } from 'react'
-import {View, Text, FlatList, StyleSheet, TouchableOpacity, Image, StatusBar} from 'react-native'
-import api from '../services/api'
-import Cards from '../components/Cards/cards'
-import mktlogo from '../../assets/img/mktlogo.png'
+import React, { Component } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  StatusBar,
+  Animated
+} from "react-native";
+import api from "../services/api";
+import Cards from "../components/Cards/cards";
+import mktlogo from "../../assets/img/mktlogo.png";
 
+export default class Main extends Component {
+  static navigationOptions = {
+    header: null
+  };
 
-export default class Main extends Component{
+  state = {
+    boards: [],
+    loadingProgress: new Animated.Value(0),
+    refreshing: false
+  };
+  componentDidMount = () => {
+    this.loadBoards();
+    Animated.timing(this.state.loadingProgress, {
+      toValue: 100,
+      duration: 2000
+    }).start();
+    this.setState({ refreshing: false });
+  };
 
-    static navigationOptions = {
-        header:null
-    }   
-    
-    state = {
-        boards: [],
-          
-    }
-   componentDidMount = () => {
-        this.loadBoards()              
-        
-    }
+  loadBoards = async () => {
+    const response = await api.get("members/me/boards");
+    const boards = response.data.map(boards => ({
+      title: boards.name,
+      id: boards.id,
+      backgroundColor: boards.prefs.backgroundColor,
+      closed: boards.closed
+    }));
 
-    loadBoards = async ()  =>{
-        const response = await api.get('members/me/boards')
-        const boards = response.data.map(boards => ({
-            title: boards.name,
-            id: boards.id,
-            backgroundColor: boards.prefs.backgroundColor,
-            closed: boards.closed
-        }))
+    this.setState({ boards });
+  };
 
-        this.setState({ boards })
-        console.log(this.state.boards)
-    }
-  
-   
-    renderItem = ({ item }) => (
-        <View>
-        <TouchableOpacity onPress={()=> this.props.navigation.navigate( 'Lista' , {  itemId: item
-              })}>
-        <Cards backgroundColor={item.backgroundColor} title={item.title} closed={item.closed}/>                
-        </TouchableOpacity>  
-       </View>        
-    )
+  handleRefresh = () => {
+    this.setState({ refreshing: true });
+  };
 
-    render(){
-        return(
-        
-            <View style={styles.container}>
-                <StatusBar
-            backgroundColor="#000F3D"
-            barStyle="light-content"
+  renderItem = ({ item }) => (
+    <Animated.View
+      style={[
+        styles.container,
+        {
+          transform: [
+            {
+              translateY: this.state.loadingProgress.interpolate({
+                inputRange: [0, 100],
+                outputRange: [50, 0]
+              })
+            }
+          ],
+          opacity: this.state.loadingProgress.interpolate({
+            inputRange: [0, 100],
+            outputRange: [0, 1]
+          })
+        }
+      ]}
+    >
+      <TouchableOpacity
+        onPress={() =>
+          this.props.navigation.navigate("Lista", { itemId: item })
+        }
+      >
+        <Cards
+          backgroundColor={item.backgroundColor}
+          title={item.title}
+          closed={item.closed}
+        />
+      </TouchableOpacity>
+    </Animated.View>
+  );
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <StatusBar backgroundColor="#000F3D" barStyle="light-content" />
+        <View style={styles.containerlogo}>
+          <Image
+            source={mktlogo}
+            style={{ width: 300, height: 100 }}
+            resizeMode="cover"
           />
-            <View style={styles.containerlogo}>
-                <Image source={mktlogo} style={{width:300 ,height: 100}} resizeMode = 'cover'/>
-            </View>
-                <View style={styles.contentText}>
-                <Text style={styles.textTitleSub}>PROJETOS</Text> 
-                </View>
-        
-             
-                  <FlatList
-                    contentContainerStyle={styles.list}
-                    data={this.state.boards}
-                    keyExtractor={item=>item.id}
-                    renderItem={this.renderItem}
-                    /> 
-       
-            </View>
-        )   
-    }
+        </View>
+        <View style={styles.contentText}>
+          <Text style={styles.textTitleSub}>PROJETOS</Text>
+        </View>
+
+        <FlatList
+          contentContainerStyle={styles.list}
+          data={this.state.boards}
+          keyExtractor={item => item.id}
+          renderItem={this.renderItem}
+          refreshing={this.state.refreshing}
+          onRefresh={this.handleRefresh}
+        />
+      </View>
+    );
+  }
 }
 
- const styles = StyleSheet.create({
-    container: {
-      flexGrow: 1,      
-      backgroundColor: '#F1EEFC',
-    },
-    
-    containerlogo:{
-        width:'100%',
-        height: 100, 
-        backgroundColor: "#3AA96C",
-        justifyContent:'center',
-        alignContent:'center', 
-        alignItems:'center'
-    },
-    textTitleSub: {
-        fontSize: 20,
-        // fontWeight: "bold",
-        color: "#000f3d",
-        marginStart: 20,
-        marginTop: 20,
-        fontFamily: 'Lato-Regular',
-        
-        
-     },
-   
-    
-    list:{
-        padding:20,
-    },
-  });
-  
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#F1EEFC",
+    marginBottom: 5
+  },
+
+  containerlogo: {
+    width: "100%",
+    height: 100,
+    backgroundColor: "#3AA96C",
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center"
+  },
+  textTitleSub: {
+    fontSize: 20,
+    // fontWeight: "bold",
+    color: "#000f3d",
+    marginStart: 20,
+    marginTop: 20,
+    fontFamily: "Lato-Regular"
+  },
+
+  list: {
+    padding: 20
+  }
+});
