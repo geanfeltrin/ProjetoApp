@@ -11,7 +11,8 @@ Array.prototype.flatMap = function(callback) {
 
 export default class Lista extends Component {
   state = {
-    cards: []
+    cards: [],
+    refreshing: false
   };
 
   static navigationOptions = ({ navigation }) => {
@@ -41,10 +42,6 @@ export default class Lista extends Component {
     }));
 
     this.setState({ cards });
-  };
-  calculo = (a, b) => {
-    const sum = a / b;
-    return sum;
   };
 
   render() {

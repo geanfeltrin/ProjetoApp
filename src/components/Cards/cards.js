@@ -89,6 +89,8 @@ export default props => {
         </View>
       </View>
     );
+  } else {
+    return null;
   }
 
   return <View>{closed}</View>;

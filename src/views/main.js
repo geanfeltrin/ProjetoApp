@@ -29,7 +29,6 @@ export default class Main extends Component {
       toValue: 100,
       duration: 2000
     }).start();
-    this.setState({ refreshing: false });
   };
 
   loadBoards = async () => {
@@ -41,11 +40,12 @@ export default class Main extends Component {
       closed: boards.closed
     }));
 
-    this.setState({ boards });
+    this.setState({ boards, refreshing: false });
   };
 
   handleRefresh = () => {
     this.setState({ refreshing: true });
+    this.loadBoards();
   };
 
   renderItem = ({ item }) => (
