@@ -5,13 +5,14 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
-  Image,
   StatusBar,
-  Animated
+  Animated,
+  ImageBackground
 } from "react-native";
 import api from "../services/api";
 import Cards from "../components/Cards/cards";
-import mktlogo from "../../assets/img/mktlogo.png";
+
+import headerlogo from "../../assets/img/header.png";
 
 export default class Main extends Component {
   static navigationOptions = {
@@ -85,11 +86,11 @@ export default class Main extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <StatusBar backgroundColor="#000F3D" barStyle="light-content" />
+        <StatusBar backgroundColor="#00133a" barStyle="light-content" />
         <View style={styles.containerlogo}>
-          <Image
-            source={mktlogo}
-            style={{ width: 300, height: 100 }}
+          <ImageBackground
+            source={headerlogo}
+            style={{ width: "100%", height: 100 }}
             resizeMode="cover"
           />
         </View>
@@ -119,11 +120,7 @@ const styles = StyleSheet.create({
 
   containerlogo: {
     width: "100%",
-    height: 100,
-    backgroundColor: "#3AA96C",
-    justifyContent: "center",
-    alignContent: "center",
-    alignItems: "center"
+    height: 100
   },
   textTitleSub: {
     fontSize: 20,

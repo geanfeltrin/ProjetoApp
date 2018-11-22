@@ -58,14 +58,21 @@ export default props => {
     bar = (
       <View
         style={{
+          flex: 1,
+          paddingLeft: 8,
+          paddingHorizontal: 20,
+          paddingTop: 10,
+          paddingBottom: 10,
           alignItems: "center",
-          justifyContent: "space-around",
-          margin: 10
+          justifyContent: "space-between",
+          width: "100%",
+          flexDirection: "row",
+          minHeight: 10
         }}
       >
         <ProgressBar
           progress={props.test}
-          width={350}
+          width={null}
           height={10}
           borderRadius={5}
           borderWidth={1}
@@ -73,6 +80,18 @@ export default props => {
           indeterminate={false}
           color={"#FFF"}
         />
+        <Text
+          style={{
+            paddingRight: 5,
+            paddingHorizontal: 5,
+            color: "#FFF",
+            fontFamily: "Lato-Thin",
+            fontWeight: "bold",
+            textAlign: "center"
+          }}
+        >
+          {Math.trunc(props.test * 100)}%
+        </Text>
       </View>
     );
   }
@@ -100,7 +119,9 @@ export default props => {
         </View>
         <View style={styles.GridViewContainer}>
           <Text style={styles.textValor}>{props.execucao}</Text>
-          <Text style={styles.textTask}>Em execução</Text>
+          <Text numberOfLines={1} style={styles.textTask}>
+            Em execução
+          </Text>
         </View>
 
         <View style={styles.GridViewContainer}>
@@ -112,20 +133,12 @@ export default props => {
 
       <View
         style={{
-          alignItems: "center",
-          justifyContent: "space-around",
-          margin: 10,
-          marginTop: 15,
-          flexDirection: "row"
+          marginVertical: 10,
+          marginLeft: 15,
+          marginRight: 25
         }}
       >
         {bar}
-
-        <Text
-          style={{ color: "#FFF", fontFamily: "Lato-Thin", fontWeight: "bold" }}
-        >
-          {Math.trunc(props.test * 100)} %
-        </Text>
       </View>
     </View>
   );

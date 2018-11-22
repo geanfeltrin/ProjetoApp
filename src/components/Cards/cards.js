@@ -70,7 +70,9 @@ export default props => {
             {check}
           </View>
           <View style={styles.contenTitle}>
-            <Text style={styles.textTitle}>{props.title}</Text>
+            <Text numberOfLines={1} style={styles.textTitle}>
+              {props.title}
+            </Text>
             {sub}
           </View>
         </View>
@@ -114,20 +116,20 @@ const styles = StyleSheet.create({
     fontFamily: "Lato-Italic"
   },
   contenTitle: {
-    width: 280,
-    height: 50
+    maxWidth: 200
   },
   textDesc: {
     fontSize: 10
   },
 
   containerBoards: {
+    flex: 1,
     paddingTop: 10,
     backgroundColor: "#ffffff",
     borderWidth: 1,
     borderColor: "#dddddd",
-    width: 350,
     height: 100,
+
     marginBottom: 20,
     shadowColor: "black",
     shadowOffset: { width: 10, height: 5 },
