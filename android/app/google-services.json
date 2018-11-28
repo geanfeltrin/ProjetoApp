@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "428921102114",
+    "firebase_url": "https://projeto-marketing-cac43.firebaseio.com",
+    "project_id": "projeto-marketing-cac43",
+    "storage_bucket": "projeto-marketing-cac43.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:428921102114:android:645513aecbf91738",
+        "android_client_info": {
+          "package_name": "com.test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "428921102114-lravag29mcu5kogujj183dcnlsm5289g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIfqJ8RGsNN8hDac9TfRqdg6clzAMCLc8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

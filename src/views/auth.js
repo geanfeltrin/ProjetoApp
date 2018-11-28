@@ -5,55 +5,43 @@ import {
   View,
   TouchableOpacity,
   Alert,
-  AsyncStorage
+  AsyncStorage,
+  Image,
+  KeyboardAvoidingView
 } from "react-native";
-import firebase from "firebase";
+import firebase from "react-native-firebase";
 import AuthInput from "../components/Auth/AuthInput";
+import icon from "../../assets/img/icone180px.png";
 
 export default class Auth extends Component {
   state = {
     stageNew: false,
-    name: "",
     email: "",
     password: "",
-    confirmPassword: ""
+    isAutenticated: false
   };
   static navigationOptions = {
     header: null
   };
 
-  // signin = (email, password) => {
-  //   try {
-  //     firebase.auth().signInWithEmailAndPassword(email, password);
-  //   } catch (err) {
-  //     Alert.alert("Erro", "Falha no Login!");
-  //     // showError(err)
-  //   }
-  // };
+  signIn = async () => {
+    const { email, password } = this.state;
+    try {
+      const user = await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password);
+      this.setState({ isAutenticated: true });
+      this.props.navigation.navigate("Main");
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-  // signup = async () => {
-  //   try {
-  //     await axios.post(`${server}/signup`, {
-  //       name: this.state.name,
-  //       email: this.state.email,
-  //       password: this.state.password,
-  //       confirmPassword: this.state.confirmPassword
-  //     });
-
-  //     Alert.alert("Sucesso!", "Usuário cadastrado :)");
-  //     this.setState({ stageNew: false });
-  //   } catch (err) {
-  //     showError(err);
-  //   }
-  // };
-
-  // signinOrSignup = () => {
-  //   if (this.state.stageNew) {
-  //     this.signup();
-  //   } else {
-  //     this.signin();
-  //   }
-  // };
+  empty = () => (
+    <View>
+      <Text>Preencha os campos </Text>
+    </View>
+  );
 
   render() {
     const validations = [];
@@ -70,7 +58,21 @@ export default class Auth extends Component {
     const validForm = validations.reduce((all, v) => all && v);
 
     return (
-      <View style={styles.background}>
+      <KeyboardAvoidingView
+        style={styles.background}
+        behavior="padding"
+        enabled
+      >
+        <View
+          style={{ alignContent: "flex-start", justifyContent: "flex-start" }}
+        >
+          <Image
+            source={icon}
+            style={{ width: 120, height: 120, margin: 30 }}
+            resizeMode="cover"
+          />
+        </View>
+
         <Text style={styles.title}>Projeto Marketing</Text>
         <View style={styles.formContainer}>
           <Text style={styles.subtitle}>Informe seus dados</Text>
@@ -89,34 +91,14 @@ export default class Auth extends Component {
             value={this.state.password}
             onChangeText={password => this.setState({ password })}
           />
-          <TouchableOpacity disabled={!validForm} onPress={this.signinOrSignup}>
-            <View
-              style={[
-                styles.button,
-                !validForm ? { backgroundColor: "#AAA" } : {}
-              ]}
-            >
-              <Text style={styles.buttonText}>
-                {this.state.stageNew ? "Registrar" : "Entrar"}
-              </Text>
+          <TouchableOpacity onPress={() => this.signIn}>
+            <View style={styles.button}>
+              <Text style={styles.buttonText}>Entrar</Text>
             </View>
           </TouchableOpacity>
+          <Text>{this.empty}</Text>
         </View>
-        <TouchableOpacity
-          style={{ padding: 10 }}
-          onPress={() =>
-            this.setState({
-              stageNew: !this.state.stageNew
-            })
-          }
-        >
-          <Text style={styles.buttonText}>
-            {this.state.stageNew
-              ? "Já possui conta?"
-              : "Ainda não possui conta?"}
-          </Text>
-        </TouchableOpacity>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -127,40 +109,44 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#00133a"
+    backgroundColor: "#FFF"
   },
   title: {
-    fontFamily: "Lato-italic",
-    color: "#FFF",
+    fontFamily: "Lato-Regular",
+    color: "#00133a",
     fontSize: 30,
-    marginBottom: 10
+    marginBottom: 5
   },
   subtitle: {
     fontFamily: "Lato-Regular",
-    color: "#FFF",
+    color: "#00133a",
     fontSize: 20,
     textAlign: "center",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    paddingBottom: 10
   },
   formContainer: {
-    backgroundColor: "rgba(0,0,0,0.6)",
-    padding: 20,
+    backgroundColor: "transparent",
+    padding: 10,
     width: "90%"
   },
   input: {
     marginTop: 10,
-    backgroundColor: "#FFF"
+    fontSize: 20,
+    backgroundColor: "#FFF",
+    borderBottomWidth: 1
   },
   button: {
-    backgroundColor: "#080",
-    marginTop: 10,
-    padding: 10,
+    backgroundColor: "#009A5D",
+    marginTop: 15,
+    padding: 13,
     alignItems: "center"
   },
   buttonText: {
     fontFamily: "Lato-Regular",
     color: "#FFF",
-    fontSize: 20
+    fontSize: 20,
+    fontWeight: "bold"
   }
 });

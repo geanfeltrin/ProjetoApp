@@ -67,8 +67,6 @@ export default class Lista extends Component {
     const sum = final / total;
     const round = parseFloat(sum.toFixed(2));
 
-    console.log(round);
-
     const params = this.props.navigation.getParam("itemId");
     return (
       <View style={{ flex: 1, marginBottom: 20 }}>
