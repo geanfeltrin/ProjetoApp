@@ -1,9 +1,11 @@
 import { createStackNavigator } from "react-navigation";
 import Main from "./views/main";
 import Lista from "./views/lista";
+import Login from "./views/login";
 
 export default createStackNavigator(
   {
+    Login,
     Main,
     Lista
   },

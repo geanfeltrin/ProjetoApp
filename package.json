@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "firebase": "^5.5.9",
     "react": "16.6.0-alpha.8af6728",
     "react-native": "0.57.4",
     "react-native-animatable": "^1.3.0",
