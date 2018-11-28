@@ -1,4 +1,4 @@
-import { StatusBar } from 'react-native'
+import { StatusBar } from "react-native";
 
-StatusBar.setBackgroundColor("#add8e6")
-StatusBar.setBarStyle("light-content")
+StatusBar.setBackgroundColor("#00133a");
+StatusBar.setBarStyle("light-content");
