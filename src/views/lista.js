@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, SectionList, StyleSheet, ScrollView } from "react-native";
+import { View, SectionList, StyleSheet } from "react-native";
 import api from "../services/api";
 import ListaContent from "../components/Lista/ListasContent";
 import ListaHeader from "../components/Lista/ListasHeader";
@@ -68,6 +68,8 @@ export default class Lista extends Component {
     const round = parseFloat(sum.toFixed(2));
 
     const params = this.props.navigation.getParam("itemId");
+    console.log(round);
+
     return (
       <View style={{ flex: 1, marginBottom: 20 }}>
         <View

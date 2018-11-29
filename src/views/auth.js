@@ -4,8 +4,6 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Alert,
-  AsyncStorage,
   Image,
   KeyboardAvoidingView
 } from "react-native";
@@ -33,29 +31,23 @@ export default class Auth extends Component {
       this.setState({ isAutenticated: true });
       this.props.navigation.navigate("Main");
     } catch (err) {
-      console.log(err);
+      console.log(err.toString());
     }
   };
 
-  empty = () => (
-    <View>
-      <Text>Preencha os campos </Text>
-    </View>
-  );
-
   render() {
-    const validations = [];
+    // const validations = [];
 
-    validations.push(this.state.email && this.state.email.includes("@"));
-    validations.push(this.state.password && this.state.password.length >= 6);
+    // validations.push(this.state.email && this.state.email.includes("@"));
+    // validations.push(this.state.password && this.state.password.length >= 6);
 
-    if (this.state.stageNew) {
-      validations.push(this.state.name && this.state.name.trim());
-      validations.push(this.state.confirmPassword);
-      validations.push(this.state.password === this.state.confirmPassword);
-    }
+    // if (this.state.stageNew) {
+    //   validations.push(this.state.name && this.state.name.trim());
+    //   validations.push(this.state.confirmPassword);
+    //   validations.push(this.state.password === this.state.confirmPassword);
+    // }
 
-    const validForm = validations.reduce((all, v) => all && v);
+    // const validForm = validations.reduce((all, v) => all && v);
 
     return (
       <KeyboardAvoidingView
@@ -96,7 +88,6 @@ export default class Auth extends Component {
               <Text style={styles.buttonText}>Entrar</Text>
             </View>
           </TouchableOpacity>
-          <Text>{this.empty}</Text>
         </View>
       </KeyboardAvoidingView>
     );
