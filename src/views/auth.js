@@ -91,7 +91,7 @@ export default class Auth extends Component {
             value={this.state.password}
             onChangeText={password => this.setState({ password })}
           />
-          <TouchableOpacity onPress={() => this.signIn}>
+          <TouchableOpacity onPress={this.signIn}>
             <View style={styles.button}>
               <Text style={styles.buttonText}>Entrar</Text>
             </View>

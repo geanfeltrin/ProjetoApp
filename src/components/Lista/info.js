@@ -72,7 +72,7 @@ export default props => {
       >
         <ProgressBar
           progress={props.test}
-          width={null}
+          width={100}
           height={10}
           borderRadius={5}
           borderWidth={1}
@@ -82,6 +82,7 @@ export default props => {
         />
         <Text
           style={{
+            flex:1,
             paddingRight: 5,
             paddingHorizontal: 5,
             color: "#FFF",
@@ -90,8 +91,8 @@ export default props => {
             textAlign: "center"
           }}
         >
-          {Math.trunc(props.test * 100)}%
-        </Text>
+         70 {Math.trunc(props.test * 100)}%
+        </Text> 
       </View>
     );
   }
