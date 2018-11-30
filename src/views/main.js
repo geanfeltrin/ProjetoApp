@@ -91,7 +91,7 @@ export default class Main extends Component {
           <ImageBackground
             source={headerlogo}
             style={{ width: "100%", height: 100 }}
-            resizeMode="cover"
+            resizeMode="center"
           />
         </View>
         <View style={styles.contentText}>
@@ -120,7 +120,11 @@ const styles = StyleSheet.create({
 
   containerlogo: {
     width: "100%",
-    height: 100
+    height: 200,
+    backgroundColor:"#000f3d"
+    
+    
+    
   },
   textTitleSub: {
     fontSize: 20,

@@ -35,7 +35,8 @@ export default class Auth extends Component {
         .signInWithEmailAndPassword(email, password);
 
       console.log(user);
-      AsyncStorage.setItem("userData", JSON.stringify(user.uid));
+      AsyncStorage.setItem('userData', JSON.stringify(user.uid))
+      
 
       this.props.navigation.navigate("Main", user.uid);
     } catch (err) {
@@ -60,7 +61,7 @@ export default class Auth extends Component {
             );
       }
 
-      console.log(err.toString());
+      
     }
   };
 
@@ -73,11 +74,9 @@ export default class Auth extends Component {
     const validForm = validations.reduce((all, v) => all && v);
 
     return (
-      <KeyboardAvoidingView
-        style={styles.background}
-        behavior="padding"
-        enabled
-      >
+      <View style={styles.background}>
+       
+      
         <View
           style={{ alignContent: "flex-start", justifyContent: "flex-start" }}
         >
@@ -112,7 +111,7 @@ export default class Auth extends Component {
             </View>
           </TouchableOpacity>
         </View>
-      </KeyboardAvoidingView>
+      </View>
     );
   }
 }

@@ -67,7 +67,8 @@ export default props => {
           justifyContent: "space-between",
           width: "100%",
           flexDirection: "row",
-          minHeight: 10
+          minHeight: 10,
+          maxHeight: 30
         }}
       >
         <ProgressBar
@@ -87,7 +88,11 @@ export default props => {
             color: "#FFF",
             fontFamily: "Lato-Thin",
             fontWeight: "bold",
-            textAlign: "center"
+            textAlign: "center",
+            justifyContent: "center",
+            marginTop: 10,
+            fontSize: 13,
+            height: 30,
           }}
         >
           {Math.trunc(props.test * 100)}%
