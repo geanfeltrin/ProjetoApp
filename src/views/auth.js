@@ -5,7 +5,12 @@ import {
   View,
   TouchableOpacity,
   Image,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Alert,
+  AsyncStorage,
+  AlertIOS,
+  Platform,
+  ActivityIndicator
 } from "react-native";
 import firebase from "react-native-firebase";
 import AuthInput from "../components/Auth/AuthInput";
@@ -28,26 +33,44 @@ export default class Auth extends Component {
       const user = await firebase
         .auth()
         .signInWithEmailAndPassword(email, password);
-      this.setState({ isAutenticated: true });
-      this.props.navigation.navigate("Main");
+
+      console.log(user);
+      AsyncStorage.setItem("userData", JSON.stringify(user.uid));
+
+      this.props.navigation.navigate("Main", user.uid);
     } catch (err) {
+      if (
+        err.toString() ==
+        "Error: The password is invalid or the user does not have a password."
+      ) {
+        Platform.OS === "ios"
+          ? AlertIOS.alert("Password Incorreto, Digite a senha novamente.")
+          : Alert.alert("Password Incorreto, Digite a senha novamente.");
+      }
+      if (
+        err.toString() ==
+        "Error: There is no user record corresponding to this identifier. The user may have been deleted."
+      ) {
+        Platform.OS === "ios"
+          ? AlertIOS.alert(
+              "Email Incorreto ou inexistente, Digite seu email novamente."
+            )
+          : Alert.alert(
+              "Email Incorreto ou inexistente, Digite seu email novamente."
+            );
+      }
+
       console.log(err.toString());
     }
   };
 
   render() {
-    // const validations = [];
+    const validations = [];
 
-    // validations.push(this.state.email && this.state.email.includes("@"));
-    // validations.push(this.state.password && this.state.password.length >= 6);
+    validations.push(this.state.email && this.state.email.includes("@"));
+    validations.push(this.state.password && this.state.password.length >= 6);
 
-    // if (this.state.stageNew) {
-    //   validations.push(this.state.name && this.state.name.trim());
-    //   validations.push(this.state.confirmPassword);
-    //   validations.push(this.state.password === this.state.confirmPassword);
-    // }
-
-    // const validForm = validations.reduce((all, v) => all && v);
+    const validForm = validations.reduce((all, v) => all && v);
 
     return (
       <KeyboardAvoidingView
@@ -69,7 +92,7 @@ export default class Auth extends Component {
         <View style={styles.formContainer}>
           <Text style={styles.subtitle}>Informe seus dados</Text>
           <AuthInput
-            icon="at"
+            icon="envelope"
             placeholder="E-mail"
             style={styles.input}
             value={this.state.email}
@@ -83,7 +106,7 @@ export default class Auth extends Component {
             value={this.state.password}
             onChangeText={password => this.setState({ password })}
           />
-          <TouchableOpacity onPress={this.signIn}>
+          <TouchableOpacity disabled={!validForm} onPress={this.signIn}>
             <View style={styles.button}>
               <Text style={styles.buttonText}>Entrar</Text>
             </View>
