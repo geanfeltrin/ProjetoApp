@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   StatusBar,
   Animated,
-  ImageBackground
+  ImageBackground,
+  BackHandler
 } from "react-native";
 import api from "../services/api";
 import Cards from "../components/Cards/cards";
@@ -30,6 +31,12 @@ export default class Main extends Component {
       toValue: 100,
       duration: 2000
     }).start();
+    BackHandler.addEventListener("hardwareBackPress", function() {
+      // this.onMainScreen and this.goBack are just examples, you need to use your own implementation here
+      // Typically you would use the navigator here to go to the last state.
+
+      return true;
+    });
   };
 
   loadBoards = async () => {
@@ -120,11 +127,10 @@ const styles = StyleSheet.create({
 
   containerlogo: {
     width: "100%",
-    height: 200,
-    backgroundColor:"#000f3d"
-    
-    
-    
+    height: 150,
+    backgroundColor: "#000f3d",
+    alignItems: "center",
+    justifyContent: "center"
   },
   textTitleSub: {
     fontSize: 20,

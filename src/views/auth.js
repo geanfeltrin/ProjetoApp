@@ -10,7 +10,8 @@ import {
   AsyncStorage,
   AlertIOS,
   Platform,
-  ActivityIndicator
+  ActivityIndicator,
+  BackHandler
 } from "react-native";
 import firebase from "react-native-firebase";
 import AuthInput from "../components/Auth/AuthInput";
@@ -27,6 +28,15 @@ export default class Auth extends Component {
     header: null
   };
 
+  componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", function() {
+      // this.onMainScreen and this.goBack are just examples, you need to use your own implementation here
+      // Typically you would use the navigator here to go to the last state.
+
+      return true;
+    });
+  }
+
   signIn = async () => {
     const { email, password } = this.state;
     try {
@@ -34,11 +44,9 @@ export default class Auth extends Component {
         .auth()
         .signInWithEmailAndPassword(email, password);
 
+      AsyncStorage.setItem("userData", JSON.stringify(user));
       console.log(user);
-      AsyncStorage.setItem('userData', JSON.stringify(user.uid))
-      
-
-      this.props.navigation.navigate("Main", user.uid);
+      this.props.navigation.navigate("Main", user);
     } catch (err) {
       if (
         err.toString() ==
@@ -60,8 +68,6 @@ export default class Auth extends Component {
               "Email Incorreto ou inexistente, Digite seu email novamente."
             );
       }
-
-      
     }
   };
 
@@ -75,20 +81,19 @@ export default class Auth extends Component {
 
     return (
       <View style={styles.background}>
-       
-      
-        <View
-          style={{ alignContent: "flex-start", justifyContent: "flex-start" }}
-        >
+        <View style={{ alignItems: "center", justifyContent: "center" }}>
           <Image
             source={icon}
-            style={{ width: 120, height: 120, margin: 30 }}
+            style={{
+              width: 120,
+              height: 120
+            }}
             resizeMode="cover"
           />
         </View>
 
         <Text style={styles.title}>Projeto Marketing</Text>
-        <View style={styles.formContainer}>
+        <KeyboardAvoidingView behavior="padding" style={styles.formContainer}>
           <Text style={styles.subtitle}>Informe seus dados</Text>
           <AuthInput
             icon="envelope"
@@ -110,7 +115,7 @@ export default class Auth extends Component {
               <Text style={styles.buttonText}>Entrar</Text>
             </View>
           </TouchableOpacity>
-        </View>
+        </KeyboardAvoidingView>
       </View>
     );
   }
