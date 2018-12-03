@@ -93,7 +93,7 @@ export default class Auth extends Component {
         </View>
 
         <Text style={styles.title}>Projeto Marketing</Text>
-        <KeyboardAvoidingView behavior="padding" style={styles.formContainer}>
+        <KeyboardAvoidingView behavior={"padding"} style={styles.formContainer}>
           <Text style={styles.subtitle}>Informe seus dados</Text>
           <AuthInput
             icon="envelope"
