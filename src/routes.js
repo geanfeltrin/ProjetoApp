@@ -3,9 +3,11 @@ import AuthOrApp from "./views/authOrApp";
 import Main from "./views/main";
 import Lista from "./views/lista";
 import Auth from "./views/auth";
+import Record from "./views/record";
 
 export default createStackNavigator(
   {
+    Record,
     AuthOrApp,
     Auth,
     Main,
