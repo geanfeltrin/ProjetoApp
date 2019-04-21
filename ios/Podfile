@@ -10,6 +10,10 @@ target 'test' do
   pod 'Firebase/Auth'
 
 
+  pod 'RNAudio', :path => '../node_modules/react-native-audio'
+
+  pod 'RNSound', :path => '../node_modules/react-native-sound'
+
   target 'testTests' do
     inherit! :search_paths
     # Pods for testing

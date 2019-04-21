@@ -148,6 +148,9 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-sound')
+    compile project(':react-native-audio-recorder-player')
+    compile project(':react-native-audio')
     compile project(':react-native-firebase')
     compile project(':react-native-vector-icons')
     implementation "com.google.firebase:firebase-auth:16.0.4"

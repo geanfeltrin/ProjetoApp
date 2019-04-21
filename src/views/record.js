@@ -1,110 +1,248 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import ProgressBar from "react-native-progress/Bar";
-import Icon from "react-native-vector-icons/FontAwesome";
-import AudioRecorderPlayer from "react-native-audio-recorder-player";
 
-import ButtonRecord from "../components/ButtonRecord/ButtonRecord";
+import {
+  AppRegistry,
+  StyleSheet,
+  Text,
+  View,
+  TouchableHighlight,
+  Platform,
+  PermissionsAndroid
+} from "react-native";
 
-export default class Record extends Component {
-  static navigationOptions = {
-    title: "Voltar",
-    headerStyle: {
-      backgroundColor: "#000000"
-    }
+import Sound from "react-native-sound";
+import { AudioRecorder, AudioUtils } from "react-native-audio";
+
+class AudioExample extends Component {
+  state = {
+    currentTime: 0.0,
+    recording: false,
+    paused: false,
+    stoppedRecording: false,
+    finished: false,
+    audioPath: "/sdcard/hello.aac",
+    hasPermission: undefined
   };
+
+  prepareRecordingPath(audioPath) {
+    AudioRecorder.prepareRecordingAtPath(audioPath, {
+      SampleRate: 22050,
+      Channels: 1,
+      AudioQuality: "High",
+      AudioEncoding: "aac",
+      AudioEncodingBitRate: 32000
+    });
+  }
+
+  componentDidMount() {
+    AudioRecorder.requestAuthorization().then(isAuthorised => {
+      this.setState({ hasPermission: isAuthorised });
+
+      if (!isAuthorised) return;
+
+      this.prepareRecordingPath(this.state.audioPath);
+
+      AudioRecorder.onProgress = data => {
+        this.setState({ currentTime: Math.floor(data.currentTime) });
+      };
+
+      AudioRecorder.onFinished = data => {
+        // Android callback comes in the form of a promise instead.
+        if (Platform.OS === "ios") {
+          this._finishRecording(
+            data.status === "OK",
+            data.audioFileURL,
+            data.audioFileSize
+          );
+        }
+      };
+    });
+  }
+
+  _renderButton(title, onPress, active) {
+    var style = active ? styles.activeButtonText : styles.buttonText;
+
+    return (
+      <TouchableHighlight style={styles.button} onPress={onPress}>
+        <Text style={style}>{title}</Text>
+      </TouchableHighlight>
+    );
+  }
+
+  _renderPauseButton(onPress, active) {
+    var style = active ? styles.activeButtonText : styles.buttonText;
+    var title = this.state.paused ? "RESUME" : "PAUSE";
+    return (
+      <TouchableHighlight style={styles.button} onPress={onPress}>
+        <Text style={style}>{title}</Text>
+      </TouchableHighlight>
+    );
+  }
+
+  async _pause() {
+    if (!this.state.recording) {
+      console.warn("Can't pause, not recording!");
+      return;
+    }
+
+    try {
+      const filePath = await AudioRecorder.pauseRecording();
+      this.setState({ paused: true });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async _resume() {
+    if (!this.state.paused) {
+      console.warn("Can't resume, not paused!");
+      return;
+    }
+
+    try {
+      await AudioRecorder.resumeRecording();
+      this.setState({ paused: false });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async _stop() {
+    if (!this.state.recording) {
+      console.warn("Can't stop, not recording!");
+      return;
+    }
+
+    this.setState({ stoppedRecording: true, recording: false, paused: false });
+
+    try {
+      const filePath = await AudioRecorder.stopRecording();
+
+      if (Platform.OS === "android") {
+        this._finishRecording(true, filePath);
+      }
+      return filePath;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async _play() {
+    if (this.state.recording) {
+      await this._stop();
+    }
+
+    // These timeouts are a hacky workaround for some issues with react-native-sound.
+    // See https://github.com/zmxv/react-native-sound/issues/89.
+    setTimeout(() => {
+      var sound = new Sound(this.state.audioPath, "", error => {
+        if (error) {
+          console.log("failed to load the sound", error);
+        }
+      });
+
+      setTimeout(() => {
+        sound.play(success => {
+          if (success) {
+            console.log("successfully finished playing");
+          } else {
+            console.log("playback failed due to audio decoding errors");
+          }
+        });
+      }, 100);
+    }, 100);
+  }
+
+  async _record() {
+    if (this.state.recording) {
+      console.warn("Already recording!");
+      return;
+    }
+
+    if (!this.state.hasPermission) {
+      console.warn("Can't record, no permission granted!");
+      return;
+    }
+
+    if (this.state.stoppedRecording) {
+      this.prepareRecordingPath(this.state.audioPath);
+    }
+
+    this.setState({ recording: true, paused: false });
+
+    try {
+      const filePath = await AudioRecorder.startRecording();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  _finishRecording(didSucceed, filePath, fileSize) {
+    this.setState({ finished: didSucceed });
+    console.log(
+      `Finished recording of duration ${
+        this.state.currentTime
+      } seconds at path: ${filePath} and size of ${fileSize || 0} bytes`
+    );
+  }
 
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.content}>
-          <View style={styles.icon}>
-            <Icon name="play" size={30} />
-          </View>
-          <View style={styles.bar}>
-            <Text style={styles.txt}>Áudio 1</Text>
-            <ProgressBar
-              progress={0.1}
-              width={260}
-              height={10}
-              borderRadius={2}
-              borderWidth={1}
-              animated={false}
-              indeterminate={false}
-              color={"#707070"}
-            />
-          </View>
-        </View>
-
-        <TouchableOpacity style={styles.micContent}>
-          <ButtonRecord name="md-mic" size={45} style={styles.icon} />
-        </TouchableOpacity>
-
-        <View
-          style={{
-            backgroundColor: "#F3F3F3",
-            flexDirection: "row",
-            height: 130,
-            justifyContent: "center",
-            alignItems: "center",
-            alignContent: "flex-end"
-          }}
-        >
-          <TouchableOpacity style={styles.micContent}>
-            <ButtonRecord name="md-mic" size={45} style={styles.icon} />
-          </TouchableOpacity>
+        <View style={styles.controls}>
+          {this._renderButton(
+            "RECORD",
+            () => {
+              this._record();
+            },
+            this.state.recording
+          )}
+          {this._renderButton("PLAY", () => {
+            this._play();
+          })}
+          {this._renderButton("STOP", () => {
+            this._stop();
+          })}
+          {/* {this._renderButton("PAUSE", () => {this._pause()} )} */}
+          {this._renderPauseButton(() => {
+            this.state.paused ? this._resume() : this._pause();
+          })}
+          <Text style={styles.progressText}>{this.state.currentTime}s</Text>
         </View>
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
+var styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column",
-    backgroundColor: "#E6E6E6",
-    alignContent: "flex-end",
-    justifyContent: "flex-end"
+    backgroundColor: "#2b608a"
   },
-  icon: {
-    height: 15,
-    flexDirection: "column-reverse",
+  controls: {
     justifyContent: "center",
     alignItems: "center",
-    margin: 30,
-    alignContent: "flex-start"
+    flex: 1
   },
-  content: {
-    backgroundColor: "#FFFFFF",
-    margin: 15,
-    height: 90,
-    flexDirection: "row"
+  progressText: {
+    paddingTop: 50,
+    fontSize: 50,
+    color: "#fff"
   },
-  bar: {
-    flexDirection: "column",
-    justifyContent: "center"
+  button: {
+    padding: 20
   },
-  micContent: {
-    borderRadius: 50,
-    width: 80,
-    height: 80,
-    backgroundColor: "#F13C3C",
-    justifyContent: "center",
-    alignItems: "center",
-    alignContent: "center",
-    flexDirection: "column-reverse",
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 1
+  disabledButtonText: {
+    color: "#eee"
   },
-  txt: {
+  buttonText: {
     fontSize: 20,
-    color: "#000000",
-    fontWeight: "bold",
-    marginBottom: 15,
-    fontFamily: "Lato-Thin"
+    color: "#fff"
+  },
+  activeButtonText: {
+    fontSize: 20,
+    color: "#B81F00"
   }
 });
+
+export default AudioExample;

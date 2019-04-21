@@ -9,8 +9,7 @@ import {
   Alert,
   AsyncStorage,
   AlertIOS,
-  Platform,
-  ActivityIndicator,
+  Platform, 
   BackHandler
 } from "react-native";
 import firebase from "react-native-firebase";
